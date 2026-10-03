@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ produto.nome }} | FUTURE WEAR{% endblock %}
+
+{% block content %}
+<main class="container-detalhe">
+    <div class="imagem-detalhe">
+        {% if produto.imagem %}
+            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+        {% else %}
+            <div class="produto-img produto-sem-imagem"><span>SEM IMAGEM</span></div>
+        {% endif %}
+    </div>
+
+    <div class="info-detalhe">
+        <h1>{{ produto.nome }}</h1>
+        <p class="categoria">
+            {{ produto.categoria|default:"-" }} / {{ produto.cor|default:"-" }} / {{ produto.tamanho|default:"-" }}
+        </p>
+        <p class="preco-detalhe">R$ {{ produto.preco }}</p>
+
+        <div class="descricao-completa">
+            <p>{{ produto.descricao }}</p>
+        </div>
+
+        <p class="estoque">ESTOQUE: {{ produto.estoque }} UNIDADES</p>
+        {% if produto.estoque > 0 %}
+            <form method="post" action="{% url 'adicionar_carrinho' produto.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-comprar-grande">ADICIONAR AO CARRINHO</button>
+            </form>
+        {% else %}
+            <button type="button" class="btn-comprar-grande" disabled style="opacity: .4;">ESGOTADO</button>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
